@@ -41,5 +41,3 @@ Opciones deshabilitadas
 - Edicion de libros y cursos.
 - Borrado de libros y cursos.
 - Se deshabilito la creacion de usuarios y todo el contenido de este modelo.
-- 
-- 
