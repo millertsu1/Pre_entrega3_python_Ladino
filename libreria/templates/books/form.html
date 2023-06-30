@@ -1,0 +1,24 @@
+<form enctype="multipart/form-data" method="post">
+  {% csrf_token %}
+
+  {% for input in form %}
+
+  <div class="mb-3">
+    <label for="" class="form-label">{{input.label}}</label>
+
+    <input 
+    type="{{ input.field.widget.input_type }}" 
+    class="form-control" 
+    name="{{ input.name }}" 
+    id="" 
+    aria-describedby="helpId" 
+    placeholder="{{input.label}}" >
+
+  </div>
+
+  <div class="col-12 help-text"> {{input.errors}} </div>
+
+  {% endfor %}
+
+  <input name="" id="" class="btn btn-primary" type="submit" value="Create Book"></input>
+</form>
