@@ -5,7 +5,7 @@
 {% block content %}
 
     <br/>
-    <div class="card mx-auto bg-dark  shadow-sm p-3 mb-5 bg-body-tertiary rounded" style="width: 30rem;">
+    <div class="card mx-auto bg-dark  shadow-sm p-3 mb-5 bg-body-tertiary rounded" style="width: 35rem;">
         <div class="card-body">
           <h5 class="card-title text-center">Profile User for {{user.username}}</h5>
           <ul class="list-group">
@@ -20,7 +20,7 @@
           </ul>
           <br/>
           <a href="{% url 'editProfile' %}" class="card-link"><button type="submit" class="button-confirm btn btn-success"> Edit Profile →</button></a>
-          <a href="{% url 'changePassword' %}" class="card-link"><button type="submit" class="button-confirm btn btn-warning"> Change Password →</button></a>
+          <a href="{% url 'changePassword' %}" class="card-link"><button type="submit" class="button-confirm btn btn-danger"> Change Password →</button></a>
           <a href="{% url 'changeAvatar' %}" class="card-link"><button type="submit" class="button-confirm btn btn-warning"> Change Avatar →</button></a>
         
         </div>

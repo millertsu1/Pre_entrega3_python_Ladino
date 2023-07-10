@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Book, Course
+from .models import Book, Course, Avatar
 from .forms import BookForm, CourseForm, CustomUserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, authenticate, login, update_session_auth_hash
 from django.contrib.auth.models import User
-from libreria.forms import UserEditForm, ChangePasswordForm
+from libreria.forms import UserEditForm, ChangePasswordForm, AvatarForm
 
 # Create your views here.
 
@@ -134,4 +134,33 @@ def changePassword(request):
     
 
 def changeAvatar(request):
-    pass
+    if request.method == 'POST':
+        form =AvatarForm(request.POST, request.FILES)
+        print(form)
+        print(form.is_valid())
+        if form.is_valid():
+            user = User.objects.get(username = request.user)
+            avatar = Avatar(user = user, image = form.cleaned_data['avatar'], id = request.user.id)
+            avatar.save()
+            avatar = Avatar.objects.filter(user = request.user.id)
+            try:
+                avatar = avatar[0].image.ur.ljust()
+            except:
+                avatar = None
+            return render(request, 'home.html', {'avatar': avatar})
+        else:
+            try:
+                avatar = Avatar.objects.filter(user = request.user.id)
+                form = AvatarForm()
+            except:
+                form = AvatarForm()
+        return render(request, 'AddAvatar.html', {'form': form})
+    
+def getavatar(request):
+    avatar = Avatar.objects.filter(user = request.user.id)
+    try:
+        avatar = avatar[0].image.url
+    except:
+        avatar = None
+    return avatar
+        

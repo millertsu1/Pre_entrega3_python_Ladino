@@ -42,9 +42,10 @@
                     {% endif%}
          
                     {% if request.user.is_authenticated %}
+                    
                     <li class="nav-item dropdown float-right">
                         <a class="nav-link dropdown-toggle" href="{% url 'profile' %}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Bienvenido, {{ user.username | upper }}
+                            Bienvenido, {{ user.username | upper }} {{avatar}}
                           </a>
                           <ul class="dropdown-menu bg-info-subtle">
                             <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>

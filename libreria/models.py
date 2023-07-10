@@ -42,7 +42,9 @@ class Course(models.Model):
         row2 = "Title: " + self.title + " - " + "Description: " + self.description
         return row2
 
-
+class Avatar(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='avatares', null = True, blank=True)
 
 
 
