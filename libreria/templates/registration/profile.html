@@ -7,6 +7,7 @@
     <br/>
     <div class="card mx-auto bg-dark  shadow-sm p-3 mb-5 bg-body-tertiary rounded" style="width: 35rem;">
         <div class="card-body">
+          <a href="{% url 'changeAvatar' %}" class="card-link"><img src='{{avatar}}' width='80px' class="rounded mx-auto d-block"><a/>
           <h5 class="card-title text-center">Profile User for {{user.username | upper}}</h5>
           <ul class="list-group">
             <small>UserName</small>

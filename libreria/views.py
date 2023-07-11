@@ -6,28 +6,34 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, authenticate, login, update_session_auth_hash
 from django.contrib.auth.models import User
 from libreria.forms import UserEditForm, ChangePasswordForm, AvatarForm
+from django.contrib import messages
 
 # Create your views here.
 
 def home(request):
-    return render(request, 'home.html')
+    avatar = getavatar(request)
+    return render(request, 'home.html', {'avatar': avatar})
 
 def us(request):
-    return render(request, 'us.html')
+    avatar = getavatar(request)
+    return render(request, 'us.html', {'avatar': avatar})
 
 """ access to books """
 @login_required
 def books(request):
     books = Book.objects.all()
-    return render(request, 'books/index.html', {'books': books})
+    avatar = getavatar(request)
+    return render(request, 'books/index.html', {'books': books, 'avatar': avatar})
 
 @login_required
 def create(request):
     form = BookForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         form.save()
+        messages.success(request, "book created successfully")
         return redirect('books')
-    return render(request, 'books/create.html', {'form':form})
+    avatar = getavatar(request)
+    return render(request, 'books/create.html', {'form':form, 'avatar':avatar})
 
 @login_required
 def edit(request, id):
@@ -35,6 +41,7 @@ def edit(request, id):
     form = BookForm(request.POST or None, request.FILES or None, instance=book)
     if form.is_valid() and request.method =='POST':
         form.save()
+        messages.success(request, "Modified successfully")
         return redirect('books')
     return render(request, 'books/edit.html', {'form':form})
 
@@ -42,21 +49,25 @@ def edit(request, id):
 def remove(request, id):
     book = Book.objects.get(id=id)
     book.delete()
+    messages.success(request, "Delete successfully")
     return redirect('books')
 
 """ access to courses"""
 @login_required
 def courses(request):
     courses = Course.objects.all()
-    return render(request, 'courses/index.html', {'courses': courses})
+    avatar = getavatar(request)
+    return render(request, 'courses/index.html', {'courses': courses, 'avatar': avatar})
 
 @login_required
 def create_course(request):
     form = CourseForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         form.save()
+        messages.success(request, "course created successfully")
         return redirect('courses')
-    return render(request, 'courses/create.html', {'form': form})
+    avatar = getavatar(request)
+    return render(request, 'courses/create.html', {'form': form,'avatar':avatar})
 
 @login_required
 def edit_course(request, id):
@@ -64,6 +75,7 @@ def edit_course(request, id):
     form = CourseForm(request.POST or None, request.FILES or None, instance=course)
     if form.is_valid() and request.method =='POST':
         form.save()
+        messages.success(request, "Modified successfully")
         return redirect('courses')
     return render(request, 'courses/edit.html', {'form': form})
 
@@ -71,6 +83,7 @@ def edit_course(request, id):
 def remove_course(request, id):
     course = Course.objects.get(id=id)
     course.delete()
+    messages.success(request, "delete successfully")
     return redirect('courses')
 
 
@@ -83,7 +96,7 @@ def register(request):
         user_creation_form = CustomUserCreationForm(data=request.POST)
         if user_creation_form.is_valid():
             user_creation_form.save()
-
+            messages.success(request, "user register successfully")
             user = authenticate(username=user_creation_form.cleaned_data['username'], password=user_creation_form.cleaned_data['password1'])
             login(request, user)
             return redirect('home')
@@ -99,7 +112,8 @@ def exit(request):
 
 @login_required
 def profile(request):
-    return render(request, 'registration/profile.html')
+    avatar = getavatar(request)
+    return render(request, 'registration/profile.html',{'avatar': avatar})
 
 @login_required
 def editProfile(request):
@@ -113,10 +127,12 @@ def editProfile(request):
             user_basic_info.first_name = form.cleaned_data.get('first_name')
             user_basic_info.last_name = form.cleaned_data.get('last_name')
             user_basic_info.save()
-            return render(request, 'registration/profile.html')
+            avatar = getavatar(request)
+            return render(request, 'registration/profile.html',{'avatar': avatar})
     else:
         form = UserEditForm(initial = {'username': user.username, 'email': user.email, 'first_name': user.first_name, 'last_name': user.last_name})
-        return render(request, 'registration/editProfile.html', {"form": form})
+        avatar = getavatar(request)
+        return render(request, 'registration/editProfile.html', {"form": form, 'avatar': avatar})
 
 @login_required
 def changePassword(request):
@@ -131,7 +147,8 @@ def changePassword(request):
         return render(request, 'home.html')
     else:
         form = ChangePasswordForm(user = user)
-        return render(request, 'registration/changePassword.html', {"form": form})
+        avatar = getavatar(request)
+        return render(request, 'registration/changePassword.html', {"form": form,'avatar':avatar})
     
 @login_required
 def changeAvatar(request):
@@ -143,12 +160,12 @@ def changeAvatar(request):
             user = User.objects.get(username = request.user)
             print(user)
             avatar = Avatar(user = user, image = form.cleaned_data['avatar'], id = request.user.id)
-            print(avatar)
+            
             avatar.save()
-            print(f"hola algo {user}")
+            
             avatar = Avatar.objects.filter(user = request.user.id)
             try:
-                avatar = avatar[0].image.url()
+                avatar = avatar[0].image.url
             except:
                 avatar = None
             
@@ -159,16 +176,18 @@ def changeAvatar(request):
                 form = AvatarForm()
             except:
                 form = AvatarForm()
-        return render(request, 'avatar.html', {'form': form})
+                
+        return render(request, 'avatar.html', {'form': form, 'avatar':avatar})
     form = AvatarForm()
-    return render(request, 'registration/avatar.html', {'form': form})
+    avatar = getavatar(request)
+    return render(request, 'registration/avatar.html', {'form': form, 'avatar':avatar})
 
 
-""" def getavatar(request):
+def getavatar(request):
     avatar = Avatar.objects.filter(user = request.user.id)
     try:
         avatar = avatar[0].image.url
     except:
         avatar = None
     return avatar
-         """
+        

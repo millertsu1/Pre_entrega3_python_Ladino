@@ -35,7 +35,6 @@
                     {% if request.user.is_authenticated %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'books' %}">Books<img src="{% static 'libreria/assets/img/book.png'%}" alt="books" width="20px"/></a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'courses' %}">Courses<img src="{% static 'libreria/assets/img/courses.png'%}" alt="courses" width="20px"/></a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'exit' %}">Logout<img src="{% static 'libreria/assets/img/logout.png'%}" alt="looout" width="20px"/></a></li>
                     {% else %}
                         <li class="nav-item">  <a class="nav-link" href="{% url 'login' %}"> Login<img src="{% static 'libreria/assets/img/login.png'%}" alt="login" width="20px"/></a></li>
                         <li class="nav-item">  <a class="nav-link" href="{% url 'register' %}"> Register<img src="{% static 'libreria/assets/img/register.png'%}" alt="login" width="20px"/></a></li>
@@ -44,12 +43,13 @@
                     {% if request.user.is_authenticated %}
                     
                     <li class="nav-item dropdown ">
-                        <a class="nav-link dropdown-toggle" href="{% url 'profile' %}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Bienvenido, {{ user.username | upper }} {{avatar}}
+                        <a class="nav-link dropdown-toggle " href="{% url 'profile' %}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Bienvenido, {{ user.username | upper }} <img src='{{avatar}}' width='30px'>
                           </a>
-                          <ul class="dropdown-menu bg-info-subtle">
+                          
+                          <ul class="dropdown-menu bg-info-subtle" style="background-color: #A78295;">
                             <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
-                            <li><a class="dropdown-item" href="#">My Account</a></li>
+                            <li><a class="dropdown-item" href="{% url 'exit' %}">Logout</a></li>
                           </ul>
                     </li>
                     
@@ -60,7 +60,7 @@
             </div>
         </div>
     </nav>
-
+    
     <div class="container">
         <div class="row">
             <div class="col-12">
@@ -69,6 +69,21 @@
         </div>
         
     </div>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {% if messages %}
+        {% for message in messages %}
+           <script>
+            Swal.fire({
+                "title": "Congrats",
+                "text": "{{message}}",
+                "icon": "success",
+                "timer": "2000",
+                "background": "#000 url(/images/trees.png)"
+            })
+           </script>
+        {% endfor %}
+    {% endif %}
     <!-- Bootstrap JavaScript Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
         integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">

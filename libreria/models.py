@@ -18,21 +18,6 @@ class Book(models.Model):
         super().delete()
 
 
-
-class User(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=100, verbose_name='Name')
-    user_type = models.CharField(max_length=50, verbose_name='User type')
-    phone_number = models.CharField(max_length=20,verbose_name='Phone Number')
-
-    """ def __str__(self):
-        return self.name """
-    
-    def __str__(self):
-        row1 = "Name: " + self.name + " - " + "User Type: " + self.user_type
-        return row1
-
-
 class Course(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100, verbose_name='Title')
@@ -46,7 +31,7 @@ class Course(models.Model):
 class Avatar(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='profile' )#related_name='profile'
     image = models.ImageField(upload_to='avatares', null = True, blank=True)
-    #image = models.ImageField(upload_to='images/', null = True, blank=True)
+
 
 
 
