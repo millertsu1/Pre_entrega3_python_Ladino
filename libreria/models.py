@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -43,8 +44,9 @@ class Course(models.Model):
         return row2
 
 class Avatar(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='profile' )#related_name='profile'
     image = models.ImageField(upload_to='avatares', null = True, blank=True)
+    #image = models.ImageField(upload_to='images/', null = True, blank=True)
 
 
 

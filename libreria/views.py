@@ -73,6 +73,7 @@ def remove_course(request, id):
     course.delete()
     return redirect('courses')
 
+
 def register(request):
     data = {
         'form': CustomUserCreationForm()
@@ -132,21 +133,25 @@ def changePassword(request):
         form = ChangePasswordForm(user = user)
         return render(request, 'registration/changePassword.html', {"form": form})
     
-
+@login_required
 def changeAvatar(request):
     if request.method == 'POST':
-        form =AvatarForm(request.POST, request.FILES)
+        form = AvatarForm(request.POST, request.FILES)
         print(form)
         print(form.is_valid())
         if form.is_valid():
             user = User.objects.get(username = request.user)
+            print(user)
             avatar = Avatar(user = user, image = form.cleaned_data['avatar'], id = request.user.id)
+            print(avatar)
             avatar.save()
+            print(f"hola algo {user}")
             avatar = Avatar.objects.filter(user = request.user.id)
             try:
-                avatar = avatar[0].image.ur.ljust()
+                avatar = avatar[0].image.url()
             except:
                 avatar = None
+            
             return render(request, 'home.html', {'avatar': avatar})
         else:
             try:
@@ -154,13 +159,16 @@ def changeAvatar(request):
                 form = AvatarForm()
             except:
                 form = AvatarForm()
-        return render(request, 'AddAvatar.html', {'form': form})
-    
-def getavatar(request):
+        return render(request, 'avatar.html', {'form': form})
+    form = AvatarForm()
+    return render(request, 'registration/avatar.html', {'form': form})
+
+
+""" def getavatar(request):
     avatar = Avatar.objects.filter(user = request.user.id)
     try:
         avatar = avatar[0].image.url
     except:
         avatar = None
     return avatar
-        
+         """
