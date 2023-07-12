@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+#from ckeditor.fields import RichTextField
+
 
 # Create your models here.
 
@@ -29,8 +31,8 @@ class Course(models.Model):
         return row2
 
 class Avatar(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='profile' )#related_name='profile'
-    image = models.ImageField(upload_to='avatares', null = True, blank=True, default="")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='profile')
+    image = models.ImageField(upload_to='avatares', null = True, blank=True, default='avatar.png')
 
 
 class Tag(models.Model):
@@ -41,10 +43,12 @@ class Tag(models.Model):
 
 class Post(models.Model):
     title = models.CharField(max_length=200)
-    body = models.TextField(null=True, blank=True, max_length=5000)
-    image = models.ImageField(null=True, blank=True, upload_to='images', default='avatar.png')
+    #body = RichTextField(null=True, blank=True)
+    body = models.TextField(null=True, blank=True)
+    image = models.ImageField(null=True, blank=True, upload_to='images', default='placeholder.png')
     state = models.BooleanField('Active', default=False)
-    tags = models.ManyToManyField(Tag, null=True, blank=True)
+    tags = models.ManyToManyField(Tag, blank=True)
+    author = models.CharField(max_length=100, null=True, blank=True,)
 
     def __str__(self):
         return self.title

@@ -7,6 +7,7 @@ from .views import exit, register, profile, editProfile, changePassword, changeA
 urlpatterns = [
     path('', views.home, name='home'),
     path('us', views.us, name='us'),
+    path('blog', views.blog, name='blog'),
     path('books', views.books, name='books'),
     path('courses', views.courses, name='courses'),
     path('books/create', views.create, name='create'),
@@ -23,5 +24,12 @@ urlpatterns = [
     path('editProfile/', editProfile, name='editProfile'),
     path('changePassword/', changePassword, name='changePassword'),
     path('changeAvatar/', changeAvatar, name='changeAvatar'),
+
+    path('posts/', views.insertPost, name='insertUrl'),
+    path('posts/<int:pk>/', views.post, name='post'),
+    path('posts/<int:pk>/edit/', views.editPost, name='editUrl'),
+
+
+
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -31,10 +31,15 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'us' %}">Us<img src="{% static 'libreria/assets/img/users.png'%}" alt="us" width="20px"/></a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'blog' %}">Blog<img src="{% static 'libreria/assets/img/users.png'%}" alt="us" width="20px"/></a>
+                    </li>
 
                     {% if request.user.is_authenticated %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'books' %}">Books<img src="{% static 'libreria/assets/img/book.png'%}" alt="books" width="20px"/></a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'courses' %}">Courses<img src="{% static 'libreria/assets/img/courses.png'%}" alt="courses" width="20px"/></a></li>
+
+                        <li class="nav-item"><a class="nav-link" href="{% url 'insertUrl' %}">Posts<img src="{% static 'libreria/assets/img/courses.png'%}" alt="courses" width="20px"/></a></li>
                     {% else %}
                         <li class="nav-item">  <a class="nav-link" href="{% url 'login' %}"> Login<img src="{% static 'libreria/assets/img/login.png'%}" alt="login" width="20px"/></a></li>
                         <li class="nav-item">  <a class="nav-link" href="{% url 'register' %}"> Register<img src="{% static 'libreria/assets/img/register.png'%}" alt="login" width="20px"/></a></li>

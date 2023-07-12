@@ -1,5 +1,6 @@
 from django import forms
-from .models import Book, Course, User
+from django.forms import ModelForm
+from .models import Book, Course, Post
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth.models import User
 
@@ -52,3 +53,13 @@ class ChangePasswordForm(PasswordChangeForm):
 
 class AvatarForm(forms.Form):
     avatar = forms.ImageField()
+
+class PostForm(ModelForm):
+
+    class Meta:
+        model = Post
+        fields ='__all__'
+
+        widgets = {
+            'tags': forms.CheckboxSelectMultiple(),
+        }

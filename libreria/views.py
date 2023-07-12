@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Book, Course, Avatar
-from .forms import BookForm, CourseForm, CustomUserCreationForm
+from .models import Book, Course, Avatar, Tag, Post
+from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, authenticate, login, update_session_auth_hash
 from django.contrib.auth.models import User
@@ -17,6 +17,12 @@ def home(request):
 def us(request):
     avatar = getavatar(request)
     return render(request, 'us.html', {'avatar': avatar})
+
+def blog(request):
+    avatar = getavatar(request)
+    return render(request, 'blog.html', {'avatar': avatar})
+
+
 
 """ access to books """
 @login_required
@@ -158,17 +164,13 @@ def changeAvatar(request):
         print(form.is_valid())
         if form.is_valid():
             user = User.objects.get(username = request.user)
-            print(user)
             avatar = Avatar(user = user, image = form.cleaned_data['avatar'], id = request.user.id)
-            
             avatar.save()
-            
             avatar = Avatar.objects.filter(user = request.user.id)
             try:
                 avatar = avatar[0].image.url
             except:
                 avatar = None
-            
             return render(request, 'home.html', {'avatar': avatar})
         else:
             try:
@@ -176,7 +178,6 @@ def changeAvatar(request):
                 form = AvatarForm()
             except:
                 form = AvatarForm()
-                
         return render(request, 'avatar.html', {'form': form, 'avatar':avatar})
     form = AvatarForm()
     avatar = getavatar(request)
@@ -191,3 +192,37 @@ def getavatar(request):
         avatar = None
     return avatar
         
+@login_required
+def insertPost(request):
+    #posts = Post.objects.all()
+    posts = Post.objects.filter(state=True)
+
+    form = PostForm()
+    if request.method =='POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+        return redirect('/')
+    avatar = getavatar(request)
+    context = {'form': form, 'posts': posts, 'avatar':avatar}
+    return render(request, 'posts/index.html', context)
+
+@login_required
+def post(request, pk):
+    post = Post.objects.get(id=pk)
+    context = {'post':post}
+    return render (request, 'posts/post.html', context)
+    #return render (request, 'posts/index.html', context)
+
+@login_required
+def editPost(request, pk):
+    post = Post.objects.get(id=pk)
+    form = PostForm(instance=post)
+    if request.method =='POST':
+        form = PostForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            form.save()
+        return redirect('home')
+    context ={'form':form}
+    return render(request, 'posts/index.html', context)
+
