@@ -30,7 +30,24 @@ class Course(models.Model):
 
 class Avatar(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='profile' )#related_name='profile'
-    image = models.ImageField(upload_to='avatares', null = True, blank=True)
+    image = models.ImageField(upload_to='avatares', null = True, blank=True, default="")
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name
+
+class Post(models.Model):
+    title = models.CharField(max_length=200)
+    body = models.TextField(null=True, blank=True, max_length=5000)
+    image = models.ImageField(null=True, blank=True, upload_to='images', default='avatar.png')
+    state = models.BooleanField('Active', default=False)
+    tags = models.ManyToManyField(Tag, null=True, blank=True)
+
+    def __str__(self):
+        return self.title
 
 
 
