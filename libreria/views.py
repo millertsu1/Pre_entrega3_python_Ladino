@@ -12,18 +12,16 @@ from django.contrib import messages
 # Create your views here.
 
 def home(request):
-    post = Post.objects.all()
     avatar = getavatar(request)
-    return render(request, 'home.html', {'avatar': avatar,'post':post})
+    return render(request, 'home.html', {'avatar': avatar})
 
 def us(request):
     avatar = getavatar(request)
     return render(request, 'us.html', {'avatar': avatar})
 
 def blog(request):
-    post = Post.objects.all()
     avatar = getavatar(request)
-    return render(request, 'blog.html', {'avatar': avatar,'post': post})
+    return render(request, 'blog.html', {'avatar': avatar})
 
 
 
@@ -210,11 +208,12 @@ def insertPost(request):
     context = {'form': form, 'posts': posts, 'avatar':avatar}
     return render(request, 'posts/index.html', context)
 
-#@login_required
+@login_required
 def post(request, pk):
     post = Post.objects.get(id=pk)
     context = {'post':post}
     return render (request, 'posts/post.html', context)
+    #return render (request, 'posts/index.html', context)
 
 @login_required
 def editPost(request, pk):
