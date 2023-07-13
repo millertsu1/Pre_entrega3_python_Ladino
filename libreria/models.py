@@ -43,8 +43,8 @@ class Tag(models.Model):
 
 class Post(models.Model):
     title = models.CharField(max_length=200)
-    #body = RichTextField(null=True, blank=True)
-    body = models.TextField(null=True, blank=True)
+    body = RichTextField(null=True, blank=True)
+    #body = models.TextField(null=True, blank=True)
     image = models.ImageField(null=True, blank=True, upload_to='images', default='placeholder.png')
     state = models.BooleanField('Active', default=False)
     tags = models.ManyToManyField(Tag, blank=True)
