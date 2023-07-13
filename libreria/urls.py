@@ -29,6 +29,8 @@ urlpatterns = [
     path('posts/<int:pk>/', views.post, name='post'),
     path('posts/<int:pk>/edit/', views.editPost, name='editUrl'),
 
+    path('posts/<int:pk>/comment/', views.postDetail, name='postDetail'),
+
 
 
 

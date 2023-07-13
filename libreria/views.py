@@ -1,12 +1,13 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from .models import Book, Course, Avatar, Tag, Post
+from .models import Book, Course, Avatar, Tag, Post, Comment
 from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, authenticate, login, update_session_auth_hash
 from django.contrib.auth.models import User
 from libreria.forms import UserEditForm, ChangePasswordForm, AvatarForm
 from django.contrib import messages
+
 
 # Create your views here.
 
@@ -226,4 +227,24 @@ def editPost(request, pk):
         return redirect('home')
     context ={'form':form}
     return render(request, 'posts/index.html', context)
+
+#COMMENTS
+
+
+
+def postDetail(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    comments = Comment.objects.filter(post=post)
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.save()
+            return redirect('post', pk=post.pk)
+    else:
+        form = CommentForm()
+
+    return render(request, 'blog', {'post': post, 'comments': comments, 'form': form})
 

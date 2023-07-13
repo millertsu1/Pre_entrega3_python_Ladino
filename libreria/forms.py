@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Book, Course, Post
+from .models import Book, Course, Post, Comment
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth.models import User
 
@@ -63,3 +63,9 @@ class PostForm(ModelForm):
         widgets = {
             'tags': forms.CheckboxSelectMultiple(),
         }
+#COMMENTS
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('author', 'text')
